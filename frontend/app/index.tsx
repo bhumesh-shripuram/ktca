@@ -12,7 +12,7 @@ import {
   Platform,
   ScrollView
 } from "react-native";
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { CameraView, Camera } from 'expo-camera/next';
 import DocumentPicker from 'react-native-document-picker';
 import * as XLSX from 'xlsx';
 import * as FileSystem from 'expo-file-system';
