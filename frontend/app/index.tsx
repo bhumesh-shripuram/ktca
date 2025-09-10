@@ -238,8 +238,11 @@ export default function AttendanceApp() {
     return (
       <View style={styles.scannerContainer}>
         <StatusBar barStyle="light-content" />
-        <BarCodeScanner
-          onBarCodeScanned={handleBarCodeScanned}
+        <CameraView
+          onBarcodeScanned={handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ["qr"],
+          }}
           style={StyleSheet.absoluteFillObject}
         />
         <View style={styles.scannerOverlay}>
