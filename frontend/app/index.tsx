@@ -638,4 +638,15 @@ const styles = StyleSheet.create({
   confirmModalButton: {
     backgroundColor: '#34C759',
   },
+  textInput: {
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: '#F2F2F7',
+    marginTop: 16,
+    minWidth: 250,
+    textAlign: 'center',
+  },
 });
