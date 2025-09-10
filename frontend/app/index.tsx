@@ -10,9 +10,9 @@ import {
   ActivityIndicator,
   Modal,
   Platform,
-  ScrollView
+  ScrollView,
+  TextInput
 } from "react-native";
-import { CameraView, Camera } from 'expo-camera';
 import DocumentPicker from 'react-native-document-picker';
 import * as XLSX from 'xlsx';
 import * as FileSystem from 'expo-file-system';
