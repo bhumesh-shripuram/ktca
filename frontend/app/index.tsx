@@ -230,30 +230,7 @@ export default function AttendanceApp() {
 
   const presentCount = attendees.filter(a => a.is_present).length;
 
-  if (showScanner) {
-    return (
-      <View style={styles.scannerContainer}>
-        <StatusBar barStyle="light-content" />
-        <CameraView
-          onBarcodeScanned={handleBarCodeScanned}
-          barcodeScannerSettings={{
-            barcodeTypes: ["qr"],
-          }}
-          style={StyleSheet.absoluteFillObject}
-        />
-        <View style={styles.scannerOverlay}>
-          <View style={styles.scannerFrame} />
-          <Text style={styles.scannerText}>Scan QR Code</Text>
-          <TouchableOpacity 
-            style={styles.cancelButton} 
-            onPress={() => setShowScanner(false)}
-          >
-            <Text style={styles.cancelButtonText}>Cancel</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
+
 
   return (
     <SafeAreaView style={styles.container}>
