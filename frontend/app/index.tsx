@@ -117,33 +117,27 @@ export default function AttendanceApp() {
     }
   };
 
-  const requestCameraPermission = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-    return status === 'granted';
-  };
-
-  const startQRScanning = async () => {
+  const startManualInput = () => {
     if (attendees.length === 0) {
       Alert.alert('No Data', 'Please select an Excel file first.');
       return;
     }
-
-    const hasPermission = await requestCameraPermission();
-    if (hasPermission) {
-      setShowScanner(true);
-    } else {
-      Alert.alert('Permission Required', 'Camera permission is required to scan QR codes.');
-    }
+    setShowManualInput(true);
   };
 
-  const handleBarCodeScanned = ({ data }: { data: string }) => {
-    const foundAttendee = attendees.find(attendee => attendee.timestamp === data);
+  const handleManualIdSubmit = () => {
+    if (!manualId.trim()) {
+      Alert.alert('Error', 'Please enter a timestamp ID.');
+      return;
+    }
+
+    const foundAttendee = attendees.find(attendee => attendee.timestamp === manualId.trim());
     
     if (!foundAttendee) {
       setModalType('invalid');
       setShowConfirmModal(true);
-      setShowScanner(false);
+      setShowManualInput(false);
+      setManualId('');
       return;
     }
 
@@ -151,14 +145,16 @@ export default function AttendanceApp() {
       setCurrentAttendee(foundAttendee);
       setModalType('already');
       setShowConfirmModal(true);
-      setShowScanner(false);
+      setShowManualInput(false);
+      setManualId('');
       return;
     }
 
     setCurrentAttendee(foundAttendee);
     setModalType('confirm');
     setShowConfirmModal(true);
-    setShowScanner(false);
+    setShowManualInput(false);
+    setManualId('');
   };
 
   const confirmPresence = async () => {
