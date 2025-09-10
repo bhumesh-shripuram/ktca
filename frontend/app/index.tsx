@@ -18,6 +18,7 @@ import * as XLSX from 'xlsx';
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 interface AttendeeRecord {
   timestamp: string;
@@ -41,6 +42,15 @@ export default function AttendanceApp() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [currentAttendee, setCurrentAttendee] = useState<AttendeeRecord | null>(null);
   const [modalType, setModalType] = useState<'confirm' | 'invalid' | 'already' | 'success'>('confirm');
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [scanning, setScanning] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
 
   useEffect(() => {
     loadSavedData();
@@ -56,6 +66,35 @@ export default function AttendanceApp() {
       console.log('Error loading saved data:', error);
     }
   };
+const startScanner = () => {
+  if (attendees.length === 0) {
+    Alert.alert('No Data', 'Please select an Excel file first.');
+    return;
+  }
+  setScanning(true);
+};
+const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
+  setScanning(false);
+
+  const foundAttendee = attendees.find(attendee => attendee.timestamp === data.trim());
+
+  if (!foundAttendee) {
+    setModalType('invalid');
+    setShowConfirmModal(true);
+    return;
+  }
+
+  if (foundAttendee.is_present) {
+    setCurrentAttendee(foundAttendee);
+    setModalType('already');
+    setShowConfirmModal(true);
+    return;
+  }
+
+  setCurrentAttendee(foundAttendee);
+  setModalType('confirm');
+  setShowConfirmModal(true);
+};
 
   const saveData = async (data: AttendeeRecord[]) => {
     try {
@@ -282,14 +321,27 @@ export default function AttendanceApp() {
 
           {attendees.length > 0 && (
             <>
-              <TouchableOpacity 
-                style={[styles.button, styles.scanButton]} 
-                onPress={startManualInput}
-                disabled={isLoading}
-              >
-                <Ionicons name="keypad-outline" size={24} color="white" />
-                <Text style={styles.buttonText}>Enter Timestamp ID</Text>
-              </TouchableOpacity>
+              <Modal visible={scanning} animationType="slide">
+  <SafeAreaView style={{ flex: 1 }}>
+    <BarCodeScanner
+      onBarCodeScanned={handleBarCodeScanned}
+      style={{ flex: 1 }}
+    />
+    <TouchableOpacity
+      style={{
+        position: 'absolute',
+        bottom: 40,
+        alignSelf: 'center',
+        backgroundColor: '#FF3B30',
+        padding: 16,
+        borderRadius: 8,
+      }}
+      onPress={() => setScanning(false)}
+    >
+      <Text style={{ color: 'white', fontWeight: '600' }}>Cancel</Text>
+    </TouchableOpacity>
+  </SafeAreaView>
+</Modal>
 
               <TouchableOpacity 
                 style={[styles.button, styles.exportButton]} 
