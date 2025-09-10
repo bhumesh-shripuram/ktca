@@ -36,8 +36,8 @@ interface AttendeeRecord {
 export default function AttendanceApp() {
   const [attendees, setAttendees] = useState<AttendeeRecord[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showScanner, setShowScanner] = useState(false);
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [showManualInput, setShowManualInput] = useState(false);
+  const [manualId, setManualId] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [currentAttendee, setCurrentAttendee] = useState<AttendeeRecord | null>(null);
   const [modalType, setModalType] = useState<'confirm' | 'invalid' | 'already' | 'success'>('confirm');
