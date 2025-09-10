@@ -383,6 +383,48 @@ export default function AttendanceApp() {
           </View>
         </View>
       </Modal>
+
+      <Modal
+        visible={showManualInput}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Ionicons name="keypad-outline" size={60} color="#007AFF" />
+            <Text style={styles.modalTitle}>Enter Timestamp ID</Text>
+            <Text style={styles.modalMessage}>
+              Enter the timestamp ID from the QR code or attendance list
+            </Text>
+            <TextInput
+              style={styles.textInput}
+              value={manualId}
+              onChangeText={setManualId}
+              placeholder="Enter timestamp ID..."
+              autoFocus={true}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+            <View style={styles.modalButtonRow}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.cancelModalButton]} 
+                onPress={() => {
+                  setShowManualInput(false);
+                  setManualId('');
+                }}
+              >
+                <Text style={styles.cancelModalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.confirmModalButton]} 
+                onPress={handleManualIdSubmit}
+              >
+                <Text style={styles.modalButtonText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
