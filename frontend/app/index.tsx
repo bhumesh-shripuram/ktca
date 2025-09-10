@@ -118,7 +118,7 @@ export default function AttendanceApp() {
   };
 
   const requestCameraPermission = async () => {
-    const { status } = await BarCodeScanner.requestPermissionsAsync();
+    const { status } = await Camera.requestCameraPermissionsAsync();
     setHasPermission(status === 'granted');
     return status === 'granted';
   };
