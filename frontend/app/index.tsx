@@ -287,11 +287,11 @@ export default function AttendanceApp() {
             <>
               <TouchableOpacity 
                 style={[styles.button, styles.scanButton]} 
-                onPress={startQRScanning}
+                onPress={startManualInput}
                 disabled={isLoading}
               >
-                <Ionicons name="qr-code-outline" size={24} color="white" />
-                <Text style={styles.buttonText}>Scan QR Code</Text>
+                <Ionicons name="keypad-outline" size={24} color="white" />
+                <Text style={styles.buttonText}>Enter Timestamp ID</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
