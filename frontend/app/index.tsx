@@ -68,13 +68,14 @@ export default function AttendanceApp() {
   const selectExcelFile = async () => {
     try {
       setIsLoading(true);
-      const result = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.xls, DocumentPicker.types.xlsx],
-        copyTo: 'documentDirectory',
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+        copyToCacheDirectory: true,
       });
 
-      if (result.fileCopyUri) {
-        const fileContent = await FileSystem.readAsStringAsync(result.fileCopyUri, {
+      if (!result.canceled && result.assets && result.assets[0]) {
+        const file = result.assets[0];
+        const fileContent = await FileSystem.readAsStringAsync(file.uri, {
           encoding: FileSystem.EncodingType.Base64,
         });
 
@@ -106,12 +107,8 @@ export default function AttendanceApp() {
         );
       }
     } catch (error) {
-      if (DocumentPicker.isCancel(error)) {
-        // User cancelled the picker
-      } else {
-        Alert.alert('Error', 'Failed to load Excel file. Please try again.');
-        console.log('Error selecting file:', error);
-      }
+      Alert.alert('Error', 'Failed to load Excel file. Please try again.');
+      console.log('Error selecting file:', error);
     } finally {
       setIsLoading(false);
     }
